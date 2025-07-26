@@ -60,7 +60,7 @@ class Terminal {
     addCommandToOutput(command) {
         const line = document.createElement('div');
         line.className = 'line';
-        line.innerHTML = `<span class="prompt">kylinwang@github:~$</span><span class="command">${command}</span>`;
+        line.innerHTML = `<span class="prompt">kylinwang@io:~$</span><span class="command">${command}</span>`;
         this.output.appendChild(line);
     }
 
@@ -91,25 +91,23 @@ class Terminal {
     }
 
     showHelp() {
-        const helpText = `
-Available commands:
-  help         - Show this help message
-  me           - Display personal information
-  ls           - List all projects
-  contact      - Show contact information
-  skills       - Display technical skills
-  education    - Show educational background
-  experience   - Display work experience
-  clear        - Clear the terminal
-  whoami       - Display current user
-  date         - Show current date and time
-  pwd          - Show current directory
-  echo [text]  - Display text
-  cat [file]   - Display file contents
-
-Use arrow keys to navigate command history.
-        `;
-        this.addOutput(helpText, 'info');
+        this.addOutput('Available commands:', 'info');
+        this.addOutput('', 'text');
+        this.addOutput('  help         - Show this help message', 'text');
+        this.addOutput('  me           - Display personal information', 'text');
+        this.addOutput('  ls           - List all projects', 'text');
+        this.addOutput('  contact      - Show contact information', 'text');
+        this.addOutput('  skills       - Display technical skills', 'text');
+        this.addOutput('  education    - Show educational background', 'text');
+        this.addOutput('  experience   - Display work experience', 'text');
+        this.addOutput('  clear        - Clear the terminal', 'text');
+        this.addOutput('  whoami       - Display current user', 'text');
+        this.addOutput('  date         - Show current date and time', 'text');
+        this.addOutput('  pwd          - Show current directory', 'text');
+        this.addOutput('  echo [text]  - Display text', 'text');
+        this.addOutput('  cat [file]   - Display file contents', 'text');
+        this.addOutput('', 'text');
+        this.addOutput('Use arrow keys to navigate command history.', 'info');
     }
 
     showAbout() {
@@ -352,7 +350,7 @@ Tools & Technologies:
     clearTerminal() {
         this.output.innerHTML = `
             <div class="line">
-                <span class="prompt">kylinwang@github:~$</span>
+                <span class="prompt">kylinwang@io:~$</span>
                 <span class="command">Welcome to Kylin Wang's Terminal Portfolio</span>
             </div>
             <div class="line">

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yiqi Wang - Terminal Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="terminal">
+        <div class="terminal-header">
+            <div class="terminal-buttons">
+                <span class="btn close"></span>
+                <span class="btn minimize"></span>
+                <span class="btn maximize"></span>
+            </div>
+            <div class="terminal-title">yiqiwang@io:~</div>
+        </div>
+        <div class="terminal-body">
+            <div id="output">
+                <div class="line">
+                    <span class="prompt">yiqiwang@io:~$</span>
+                    <span class="command">Welcome to Yiqi Wang's Terminal Portfolio</span>
+                </div>
+                <div class="line">
+                    <span class="text">Type 'help' to see available commands.</span>
+                </div>
+                <div class="line">
+                    <span class="text">Use 'clear' to clear the terminal.</span>
+                </div>
+                <div class="line"></div>
+            </div>
+            <div class="input-line">
+                <span class="prompt">yiqiwang@io:~$</span>
+                <input type="text" id="command-input" autocomplete="off" autofocus>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

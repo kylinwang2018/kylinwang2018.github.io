@@ -36,8 +36,6 @@ class Terminal {
             whoami: () => this.addOutput('yiqiwang', 'success'),
             date: () => this.addOutput(new Date().toString(), 'text'),
             pwd: () => this.addOutput('/home/yiqiwang', 'text'),
-            echo: (args) => this.addOutput(args.join(' '), 'text'),
-            cat: (args) => this.catCommand(args),
             contact: () => this.showContact(),
             skills: () => this.showSkills(),
             education: () => this.showEducation(),
@@ -127,8 +125,6 @@ class Terminal {
     whoami       - Display current user
     date         - Show current date and time
     pwd          - Show current directory
-    echo [text]  - Display text
-    cat [file]   - Display file contents
 
 Use arrow keys to navigate command history.`, 'info');
     }
@@ -295,26 +291,6 @@ Career Highlights:
     • [Major project or accomplishment]
     • [Recognition or award received]
     • [Skills developed or technologies mastered]`, 'text');
-    }
-
-    catCommand(args) {
-        if (args.length === 0) {
-            this.addOutput('cat: missing file operand', 'error');
-            return;
-        }
-
-        const filename = args[0];
-        const files = {
-            'readme.txt': 'Welcome to Yiqi Wang\'s terminal portfolio!\nThis interactive terminal showcases my skills and projects.\n\nFeatures:\n• Interactive terminal interface\n• Multiple commands to explore\n• Responsive design\n• Command history navigation',
-            'about.txt': 'Passionate software engineer with expertise in full-stack development.\n\nI love creating innovative solutions and exploring new technologies.\nAlways eager to learn and contribute to meaningful projects.',
-            'projects.txt': 'Check out my projects using the "ls" command!\n\nYou can also use:\n• "contact" to reach out\n• "skills" to see my technical abilities\n• "experience" for work history'
-        };
-
-        if (files[filename]) {
-            this.addOutput(files[filename], 'text');
-        } else {
-            this.addOutput(`cat: ${filename}: No such file or directory`, 'error');
-        }
     }
 
     navigateHistory(direction) {

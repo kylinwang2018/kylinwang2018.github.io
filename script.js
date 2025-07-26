@@ -33,9 +33,9 @@ class Terminal {
             clear: () => this.clearTerminal(),
             me: () => this.showAbout(),
             ls: () => this.showProjects(),
-            whoami: () => this.addOutput('kylinwang', 'success'),
+            whoami: () => this.addOutput('yiqiwang', 'success'),
             date: () => this.addOutput(new Date().toString(), 'text'),
-            pwd: () => this.addOutput('/home/kylinwang', 'text'),
+            pwd: () => this.addOutput('/home/yiqiwang', 'text'),
             echo: (args) => this.addOutput(args.join(' '), 'text'),
             cat: (args) => this.catCommand(args),
             contact: () => this.showContact(),
@@ -60,8 +60,10 @@ class Terminal {
     addCommandToOutput(command) {
         const line = document.createElement('div');
         line.className = 'line';
-        line.innerHTML = `<span class="prompt">kylinwang@io:~$</span><span class="command">${command}</span>`;
-        this.output.appendChild(line);
+        line.innerHTML = `<span class="prompt">yiqiwang@io:~$</span><span class="command">${command}</span>`;
+        const inputLine = document.querySelector('.input-line');
+        // Insert before the input line
+        this.output.insertBefore(line, inputLine);
     }
 
     executeCommand(command) {
@@ -77,238 +79,222 @@ class Terminal {
     }
 
     addOutput(text, className = 'text') {
-        const line = document.createElement('div');
-        line.className = 'line';
-        line.innerHTML = `<span class="${className}">${text}</span>`;
-        this.output.appendChild(line);
+        // Split text by newlines and process each line
+        const lines = text.split('\n');
+        const inputLine = document.querySelector('.input-line');
+        
+        lines.forEach(lineText => {
+            const line = document.createElement('div');
+            line.className = 'line';
+            // Handle empty lines - check if line is completely empty (not just whitespace)
+            if (lineText === '') {
+                line.innerHTML = `<span class="${className}">&nbsp;</span>`;
+            } else {
+                // Preserve leading spaces by replacing them with non-breaking spaces
+                const preservedSpaces = lineText.replace(/^ +/, match => '&nbsp;'.repeat(match.length));
+                line.innerHTML = `<span class="${className}">${preservedSpaces}</span>`;
+            }
+            // Insert before the input line
+            this.output.insertBefore(line, inputLine);
+        });
+    }
+
+    // Convenience method for adding empty lines
+    addEmptyLine() {
+        this.addOutput('', 'text');
     }
 
     addOutputHTML(html) {
         const line = document.createElement('div');
         line.className = 'line';
         line.innerHTML = html;
-        this.output.appendChild(line);
+        const inputLine = document.querySelector('.input-line');
+        // Insert before the input line
+        this.output.insertBefore(line, inputLine);
     }
 
     showHelp() {
-        this.addOutput('Available commands:', 'info');
-        this.addOutput('', 'text');
-        this.addOutput('  help         - Show this help message', 'text');
-        this.addOutput('  me           - Display personal information', 'text');
-        this.addOutput('  ls           - List all projects', 'text');
-        this.addOutput('  contact      - Show contact information', 'text');
-        this.addOutput('  skills       - Display technical skills', 'text');
-        this.addOutput('  education    - Show educational background', 'text');
-        this.addOutput('  experience   - Display work experience', 'text');
-        this.addOutput('  clear        - Clear the terminal', 'text');
-        this.addOutput('  whoami       - Display current user', 'text');
-        this.addOutput('  date         - Show current date and time', 'text');
-        this.addOutput('  pwd          - Show current directory', 'text');
-        this.addOutput('  echo [text]  - Display text', 'text');
-        this.addOutput('  cat [file]   - Display file contents', 'text');
-        this.addOutput('', 'text');
-        this.addOutput('Use arrow keys to navigate command history.', 'info');
+        this.addOutput(`Available commands:
+
+    help         - Show this help message
+    me           - Display personal information
+    ls           - List all projects
+    contact      - Show contact information
+    skills       - Display technical skills
+    education    - Show educational background
+    experience   - Display work experience
+    clear        - Clear the terminal
+    whoami       - Display current user
+    date         - Show current date and time
+    pwd          - Show current directory
+    echo [text]  - Display text
+    cat [file]   - Display file contents
+
+Use arrow keys to navigate command history.`, 'info');
     }
 
     showAbout() {
-        const aboutText = `
-┌─────────────────────────────────────────────────────────────┐
-│                      YIQI WANG                              │
-│                 Senior Software Engineer                    │
-└─────────────────────────────────────────────────────────────┘
+        this.addOutput(`YIQI WANG
+Senior Software Engineer
 
-🚀 Passionate Full-Stack Developer | Machine Learning | Tech Enthusiast
+Passionate Full-Stack Developer | Machine Learning | Tech Enthusiast
 
-💼 Professional Summary:
-   Experienced software engineer with expertise in modern web technologies
-   and a strong background in full-stack development. Passionate about
-   creating efficient, scalable solutions and staying current with
-   emerging technologies.
+Professional Summary:
+    Experienced software engineer with expertise in modern web technologies
+    and a strong background in full-stack development. Passionate about
+    creating efficient, scalable solutions and staying current with
+    emerging technologies.
 
-🎯 Current Focus:
-   • Building scalable web applications
-   • Exploring cloud technologies and DevOps
-   • Contributing to open-source projects
-   • Continuous learning and skill development
+Current Focus:
+    • Building scalable web applications
+    • Exploring cloud technologies and DevOps
+    • Contributing to open-source projects
+    • Continuous learning and skill development
 
-💡 Philosophy:
-   "Code is cheap, show your prompt."
+Philosophy:
+    "Code is cheap, show your prompt."
 
-📍 Location: [Your Location]
-🌐 GitHub: github.com/kylinwang2018
-        `;
-        this.addOutput(aboutText, 'success');
+Location: [Your Location]
+GitHub:   github.com/kylinwang2018`, 'text');
     }
 
     showProjects() {
-        this.addOutput('📁 Projects Directory:', 'info');
-        this.addOutput('', 'text');
-        
-        const projects = [
-            {
-                name: 'Terminal Portfolio',
-                description: 'Interactive terminal-style personal portfolio website',
-                tech: 'HTML, CSS, JavaScript',
-                status: 'Active'
-            },
-            {
-                name: 'Project Alpha',
-                description: 'Full-stack web application with modern tech stack',
-                tech: 'React, Node.js, MongoDB',
-                status: 'In Development'
-            },
-            {
-                name: 'Data Visualization Tool',
-                description: 'Interactive dashboard for data analysis and visualization',
-                tech: 'D3.js, Python, Flask',
-                status: 'Completed'
-            },
-            {
-                name: 'Mobile App Beta',
-                description: 'Cross-platform mobile application',
-                tech: 'React Native, Firebase',
-                status: 'Planning'
-            },
-            {
-                name: 'Open Source Contribution',
-                description: 'Contributing to various open-source projects',
-                tech: 'Various',
-                status: 'Ongoing'
-            }
-        ];
+        this.addOutput(`Projects Directory:
 
-        projects.forEach(project => {
-            this.addOutputHTML(`
-                <div class="project-item">
-                    <div class="project-title">📦 ${project.name}</div>
-                    <div class="project-description">   ${project.description}</div>
-                    <div class="project-tech">   Tech: ${project.tech}</div>
-                    <div class="project-tech">   Status: ${project.status}</div>
-                </div>
-            `);
-        });
+┌─ Terminal Portfolio
+│  Interactive terminal-style personal portfolio website
+│  Tech: HTML, CSS, JavaScript
+└  Status: Active
+
+┌─ Project Alpha
+│  Full-stack web application with modern tech stack
+│  Tech: React, Node.js, MongoDB
+└  Status: In Development
+
+┌─ Data Visualization Tool
+│  Interactive dashboard for data analysis and visualization
+│  Tech: D3.js, Python, Flask
+└  Status: Completed
+
+┌─ Mobile App Beta
+│  Cross-platform mobile application
+│  Tech: React Native, Firebase
+└  Status: Planning
+
+┌─ Open Source Contribution
+│  Contributing to various open-source projects
+│  Tech: Various
+└  Status: Ongoing`, 'text');
     }
 
     showContact() {
-        const contactText = `
-📞 Contact Information:
-──────────────────────────────────────────
+        this.addOutput(`Contact Information:
 
-📧 Email:     [your-email@example.com]
-💼 LinkedIn:  linkedin.com/in/kylinwang
-🐙 GitHub:    github.com/kylinwang2018
-🌐 Website:   kylinwang2018.github.io
-📱 Twitter:   @kylinwang (if applicable)
+Email:       [your-email@example.com]
+LinkedIn:    linkedin.com/in/kylinwang
+GitHub:      github.com/kylinwang2018
+Website:     kylinwang2018.github.io
+Twitter:     @kylinwang (if applicable)
 
-💬 Feel free to reach out for:
-   • Collaboration opportunities
-   • Technical discussions
-   • Project inquiries
-   • Open source contributions
-        `;
-        this.addOutput(contactText, 'info');
+Feel free to reach out for:
+    • Collaboration opportunities
+    • Technical discussions
+    • Project inquiries
+    • Open source contributions`, 'text');
     }
 
     showSkills() {
-        const skillsText = `
-🛠️  Technical Skills:
-──────────────────────────────────────────
+        this.addOutput(`Technical Skills:
 
 Programming Languages:
-  ▶ JavaScript/TypeScript  ████████████ Expert
-  ▶ Python                ███████████  Advanced
-  ▶ Java                  ████████     Intermediate
-  ▶ C++                   ███████      Intermediate
+    JavaScript/TypeScript    Expert
+    Python                   Advanced
+    Java                     Intermediate
+    C++                      Intermediate
 
 Frontend Technologies:
-  ▶ React/Next.js         ███████████  Advanced
-  ▶ Vue.js                ████████     Intermediate
-  ▶ HTML/CSS              ████████████ Expert
-  ▶ Tailwind CSS          ███████████  Advanced
+    React/Next.js            Advanced
+    Vue.js                   Intermediate
+    HTML/CSS                 Expert
+    Tailwind CSS             Advanced
 
 Backend Technologies:
-  ▶ Node.js               ███████████  Advanced
-  ▶ Express.js            ███████████  Advanced
-  ▶ Django/Flask          ████████     Intermediate
-  ▶ RESTful APIs          ███████████  Advanced
+    Node.js                  Advanced
+    Express.js               Advanced
+    Django/Flask             Intermediate
+    RESTful APIs             Advanced
 
 Databases:
-  ▶ MongoDB               ████████     Intermediate
-  ▶ PostgreSQL            ████████     Intermediate
-  ▶ MySQL                 ███████      Intermediate
+    MongoDB                  Intermediate
+    PostgreSQL               Intermediate
+    MySQL                    Intermediate
 
 Tools & Technologies:
-  ▶ Git/GitHub            ████████████ Expert
-  ▶ Docker                ████████     Intermediate
-  ▶ AWS/Cloud Services    ███████      Intermediate
-  ▶ CI/CD                 ███████      Intermediate
-        `;
-        this.addOutput(skillsText, 'success');
+    Git/GitHub               Expert
+    Docker                   Intermediate
+    AWS/Cloud Services       Intermediate
+    CI/CD                    Intermediate`, 'text');
     }
 
     showEducation() {
-        const educationText = `
-🎓 Education:
-──────────────────────────────────────────
+        this.addOutput(`Education:
 
-🏛️  [University Name]
-    Bachelor of Science in Computer Science
-    📅 Graduation: [Year]
-    🏆 GPA: [X.X/4.0] (if you want to include)
-    
-    Relevant Coursework:
+University: [University Name]
+Degree:     Bachelor of Science in Computer Science
+Graduation: [Year]
+GPA:        [X.X/4.0] (if you want to include)
+
+Relevant Coursework:
     • Data Structures & Algorithms
     • Software Engineering
     • Database Systems
     • Web Development
     • Machine Learning
 
-📚 Certifications & Additional Learning:
+Certifications & Additional Learning:
     • [Any relevant certifications]
     • [Online courses completed]
     • [Technical workshops attended]
 
-🌟 Academic Achievements:
+Academic Achievements:
     • [Any honors, awards, or notable projects]
-    • [Research work or publications]
-        `;
-        this.addOutput(educationText, 'info');
+    • [Research work or publications]`, 'text');
     }
 
     showExperience() {
-        const experienceText = `
-💼 Professional Experience:
-──────────────────────────────────────────
+        this.addOutput(`Professional Experience:
 
-👨‍💻 [Current/Most Recent Position]
-    [Company Name] | [Start Date] - [End Date/Present]
-    
-    🎯 Key Responsibilities:
-       • [Responsibility 1]
-       • [Responsibility 2]
-       • [Responsibility 3]
-    
-    🏆 Achievements:
-       • [Achievement 1]
-       • [Achievement 2]
+Position:    [Current/Most Recent Position]
+Company:     [Company Name]
+Duration:    [Start Date] - [End Date/Present]
 
-👨‍💻 [Previous Position]
-    [Company Name] | [Start Date] - [End Date]
-    
-    🎯 Key Responsibilities:
-       • [Responsibility 1]
-       • [Responsibility 2]
-    
-    🏆 Achievements:
-       • [Achievement 1]
-       • [Achievement 2]
+Key Responsibilities:
+    • [Responsibility 1]
+    • [Responsibility 2] 
+    • [Responsibility 3]
 
-📈 Career Highlights:
+Achievements:
+    • [Achievement 1]
+    • [Achievement 2]
+
+──────────────────────────────────────
+
+Position:    [Previous Position]
+Company:     [Company Name]
+Duration:    [Start Date] - [End Date]
+
+Key Responsibilities:
+    • [Responsibility 1]
+    • [Responsibility 2]
+
+Achievements:
+    • [Achievement 1]
+    • [Achievement 2]
+
+Career Highlights:
     • [Major project or accomplishment]
     • [Recognition or award received]
-    • [Skills developed or technologies mastered]
-        `;
-        this.addOutput(experienceText, 'success');
+    • [Skills developed or technologies mastered]`, 'text');
     }
 
     catCommand(args) {
@@ -319,9 +305,9 @@ Tools & Technologies:
 
         const filename = args[0];
         const files = {
-            'readme.txt': 'Welcome to Kylin Wang\'s terminal portfolio!\nThis interactive terminal showcases my skills and projects.',
-            'about.txt': 'Passionate software engineer with expertise in full-stack development.',
-            'projects.txt': 'Check out my projects using the "ls" command!'
+            'readme.txt': 'Welcome to Yiqi Wang\'s terminal portfolio!\nThis interactive terminal showcases my skills and projects.\n\nFeatures:\n• Interactive terminal interface\n• Multiple commands to explore\n• Responsive design\n• Command history navigation',
+            'about.txt': 'Passionate software engineer with expertise in full-stack development.\n\nI love creating innovative solutions and exploring new technologies.\nAlways eager to learn and contribute to meaningful projects.',
+            'projects.txt': 'Check out my projects using the "ls" command!\n\nYou can also use:\n• "contact" to reach out\n• "skills" to see my technical abilities\n• "experience" for work history'
         };
 
         if (files[filename]) {
@@ -350,14 +336,23 @@ Tools & Technologies:
     clearTerminal() {
         this.output.innerHTML = `
             <div class="line">
-                <span class="prompt">kylinwang@io:~$</span>
-                <span class="command">Welcome to Kylin Wang's Terminal Portfolio</span>
+                <span class="prompt">yiqiwang@io:~$</span>
+                <span class="command">Welcome to Yiqi Wang's Terminal Portfolio</span>
             </div>
             <div class="line">
                 <span class="text">Type 'help' to see available commands.</span>
             </div>
             <div class="line"></div>
+            <div class="input-line">
+                <span class="prompt">yiqiwang@io:~$</span>
+                <input type="text" id="command-input" autocomplete="off" autofocus>
+            </div>
         `;
+        // Re-setup the input reference and event listeners
+        this.input = document.getElementById('command-input');
+        this.setupEventListeners();
+        // Ensure the input is focused
+        this.input.focus();
     }
 
     scrollToBottom() {

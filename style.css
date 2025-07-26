@@ -6,8 +6,8 @@
 
 body {
     font-family: 'Courier New', monospace;
-    background-color: #1e1e1e;
-    color: #00ff00;
+    background-color: #272822;
+    color: #f8f8f2;
     overflow: hidden;
     height: 100vh;
     display: flex;
@@ -19,9 +19,9 @@ body {
     width: 90%;
     max-width: 800px;
     height: 80%;
-    background-color: #000;
+    background-color: #272822;
     border-radius: 8px;
-    box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+    box-shadow: 0 0 20px rgba(248, 248, 242, 0.1);
     overflow: hidden;
 }
 
@@ -68,12 +68,9 @@ body {
     padding: 20px;
     height: calc(100% - 30px);
     overflow-y: auto;
-    display: flex;
-    flex-direction: column;
 }
 
 #output {
-    flex-grow: 1;
     margin-bottom: 10px;
 }
 
@@ -83,29 +80,29 @@ body {
 }
 
 .prompt {
-    color: #00ff00;
+    color: #a6e22e;
     font-weight: bold;
 }
 
 .command {
-    color: #fff;
+    color: #f8f8f2;
     margin-left: 10px;
 }
 
 .text {
-    color: #00ff00;
+    color: #f8f8f2;
 }
 
 .error {
-    color: #ff4444;
+    color: #f92672;
 }
 
 .success {
-    color: #44ff44;
+    color: #a6e22e;
 }
 
 .info {
-    color: #4444ff;
+    color: #66d9ef;
 }
 
 .input-line {
@@ -116,7 +113,7 @@ body {
 #command-input {
     background: transparent;
     border: none;
-    color: #fff;
+    color: #f8f8f2;
     font-family: 'Courier New', monospace;
     font-size: 14px;
     outline: none;
@@ -138,12 +135,12 @@ body {
 }
 
 .project-description {
-    color: #aaa;
+    color: #f8f8f2;
     margin-bottom: 5px;
 }
 
 .project-tech {
-    color: #888;
+    color: #75715e;
     font-style: italic;
 }
 
@@ -162,16 +159,16 @@ body {
 }
 
 .terminal-body::-webkit-scrollbar-track {
-    background: #000;
+    background: #272822;
 }
 
 .terminal-body::-webkit-scrollbar-thumb {
-    background: #00ff00;
+    background: #75715e;
     border-radius: 4px;
 }
 
 .terminal-body::-webkit-scrollbar-thumb:hover {
-    background: #00cc00;
+    background: #a6e22e;
 }
 
 /* Responsive design */

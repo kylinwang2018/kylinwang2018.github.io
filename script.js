@@ -136,12 +136,19 @@ Senior Software Engineer
 Passionate Full-Stack Developer | Machine Learning | Tech Enthusiast
 
 Professional Summary:
-    Experienced software engineer with expertise in modern web technologies
-    and a strong background in full-stack development. Passionate about
-    creating efficient, scalable solutions and staying current with
-    emerging technologies.
+    Experienced Senior Software Engineer with a strong background in .NET development,
+    modern web technologies, and system design. Skilled in building scalable backend
+    services and interactive front-end interfaces. Proven expertise in asynchronous 
+    programming with C#, SignalR for real-time communication, and performance-optimized 
+    SQL development. Adept at integrating third-party APIs, including payment gateways 
+    like Stripe, and implementing secure file upload systems with chunked transfer and 
+    encryption. Familiar with RabbitMQ for messaging, Redis for caching, and DevOps 
+    pipelines for streamlined deployment. Strong interest in machine learning 
+    applications, and experienced in building AI-assisted content transformation systems. 
+    Collaborative and pragmatic, with a user-focused mindset and an ability to balance 
+    business needs with technical execution.
 
-Current Focus:
+    Current Focus:
     • Building scalable web applications
     • Exploring cloud technologies and DevOps
     • Contributing to open-source projects
@@ -150,47 +157,46 @@ Current Focus:
 Philosophy:
     "Code is cheap, show your prompt."
 
-Location: [Your Location]
+Location: Canada
+    • Vancouver, British Columbia
 GitHub:   github.com/kylinwang2018`, 'text');
     }
 
     showProjects() {
         this.addOutput(`Projects Directory:
 
-┌─ Terminal Portfolio
-│  Interactive terminal-style personal portfolio website
-│  Tech: HTML, CSS, JavaScript
-└  Status: Active
+┌─ Smart Reading and Learning Companion
+│  An AI-powered dual-mode content transformation system that turns complex articles 
+│      into kid-friendly or language-learning formats.
+│  Tech: NET, SignalR, DeepSeek
+└  Status: Under Development
 
-┌─ Project Alpha
-│  Full-stack web application with modern tech stack
-│  Tech: React, Node.js, MongoDB
-└  Status: In Development
-
-┌─ Data Visualization Tool
-│  Interactive dashboard for data analysis and visualization
-│  Tech: D3.js, Python, Flask
+┌─ Synchronized Multi-Client Video Playback
+│  A real-time multi-client video viewer where all participants see synchronized 
+│      playback across machines. Server-side stress testing with 200+ clients.
+│  Tech: HTML5 Video, Bootstrap, SignalR.
 └  Status: Completed
 
-┌─ Mobile App Beta
-│  Cross-platform mobile application
-│  Tech: React Native, Firebase
-└  Status: Planning
+┌─ Kinex Japanese Used Car Sales System
+│  A web-based system for Japanese used car sales, with features for managing
+│      inventory, customer interactions, and sales processes.
+│  Tech: ASP.NET Core, Entity Framework, PostgreSQL, RabbitMQ
+└  Status: Completed
 
-┌─ Open Source Contribution
-│  Contributing to various open-source projects
-│  Tech: Various
-└  Status: Ongoing`, 'text');
+┌─ Lumi Glass Sales Management System
+│  A sales management system for Lumi Glass, focusing on inventory management,
+│      order processing, and customer relationship management.
+│  Tech: .NET 9, PostgreSQL, RabbitMQ, Redis
+└  Status: Completed`, 'text');
     }
 
     showContact() {
         this.addOutput(`Contact Information:
 
-Email:       [your-email@example.com]
-LinkedIn:    linkedin.com/in/kylinwang
+Email:       benwang.developer@gmail.com
+LinkedIn:    linkedin.com/in/yiqi-wang-ben/
 GitHub:      github.com/kylinwang2018
-Website:     kylinwang2018.github.io
-Twitter:     @kylinwang (if applicable)
+Website:     yiqiwang.io
 
 Feel free to reach out for:
     • Collaboration opportunities
@@ -201,96 +207,109 @@ Feel free to reach out for:
 
     showSkills() {
         this.addOutput(`Technical Skills:
-
-Programming Languages:
-    JavaScript/TypeScript    Expert
-    Python                   Advanced
-    Java                     Intermediate
-    C++                      Intermediate
-
-Frontend Technologies:
-    React/Next.js            Advanced
-    Vue.js                   Intermediate
-    HTML/CSS                 Expert
-    Tailwind CSS             Advanced
-
-Backend Technologies:
-    Node.js                  Advanced
-    Express.js               Advanced
-    Django/Flask             Intermediate
-    RESTful APIs             Advanced
-
-Databases:
-    MongoDB                  Intermediate
-    PostgreSQL               Intermediate
-    MySQL                    Intermediate
-
-Tools & Technologies:
-    Git/GitHub               Expert
-    Docker                   Intermediate
-    AWS/Cloud Services       Intermediate
-    CI/CD                    Intermediate`, 'text');
+    Languages:  C#, JavaScript, TypeScript, Python, SQL
+    Frameworks: .NET, React, Node.js, Express
+    Databases: SQL Server, MongoDB, PostgreSQL
+    Tools:     Git, Docker, Jenkins, Azure DevOps
+`, 'text');
     }
 
     showEducation() {
         this.addOutput(`Education:
 
-University: [University Name]
-Degree:     Bachelor of Science in Computer Science
-Graduation: [Year]
-GPA:        [X.X/4.0] (if you want to include)
+University: The University of Melbourne
+Location:   Melbourne, Australia
+Degree:     Master of Information Technology
+Major:      Machine Learning
 
 Relevant Coursework:
-    • Data Structures & Algorithms
-    • Software Engineering
-    • Database Systems
-    • Web Development
+    • Advanced Algorithms
+    • Data Structures
     • Machine Learning
-
-Certifications & Additional Learning:
-    • [Any relevant certifications]
-    • [Online courses completed]
-    • [Technical workshops attended]
+    • Web Development
+    • Database Systems
 
 Academic Achievements:
-    • [Any honors, awards, or notable projects]
-    • [Research work or publications]`, 'text');
+    • Paper: Identifying lameness in horses through deep learning
+        dl.acm.org/doi/10.1145/3412841.3441973
+    `, 'text');
     }
 
     showExperience() {
         this.addOutput(`Professional Experience:
 
-Position:    [Current/Most Recent Position]
-Company:     [Company Name]
-Duration:    [Start Date] - [End Date/Present]
+Position:    Senior Software Engineer
+Company:     PressReader
+Duration:    2023-06 - Present
 
 Key Responsibilities:
-    • [Responsibility 1]
-    • [Responsibility 2] 
-    • [Responsibility 3]
+    • Led the transition from a monolithic architecture to a microservices-based 
+        structure, modularizing services based on business logic for efficient 
+        inter-service communication.
+    • Conducted in-depth analysis of the payment system’s bottlenecks and 
+        shortcomings, identifying issues like payment latency, error handling, and 
+        data consistency. Collaborated with the team to develop solutions, 
+        redesigning and implementing core payment processes and data synchronization 
+        mechanisms, which improved system reliability and performance, and 
+        significantly enhanced the user experience.
+    • Planned and executed a large-scale migration of user payment data, ensuring 
+        data integrity and accuracy throughout the process. Designed a phased 
+        migration strategy to minimize impact on the production environment and 
+        implemented exception-handling mechanisms.
+    • Implemented key performance indicators and metrics for the payment system, 
+        such as success rate, response time, and error rate, creating real-time 
+        monitoring dashboards in Prometheus and Grafana. Configured automatic 
+        alerting mechanisms to notify relevant teams of abnormal fluctuations or 
+        threshold breaches in critical metrics, enabling rapid issue identification 
+        and response, which significantly improved system stability and incident 
+        management.
+    • Led the integration of multiple third-party payment APIs, including key 
+    functions like payment authorization, settlement, and refunds. Ensured API 
+    compliance and optimized data transmission and response times.
+    • As a senior developer, provided guidance to junior developers, offering 
+    one-on-one technical training, code reviews, and regular knowledge-sharing sessions. 
+    Helped junior team members quickly advance their technical skills, ensuring their 
+    code quality met team standards.
 
 Achievements:
-    • [Achievement 1]
-    • [Achievement 2]
+    • First Place Overall in PressReader's Inaugural Internal Hackathon.
 
 ──────────────────────────────────────
 
-Position:    [Previous Position]
-Company:     [Company Name]
-Duration:    [Start Date] - [End Date]
+Position:    Software Engineer
+Company:     D3 Security Management 
+Duration:    2022-06 - 2023-06
 
 Key Responsibilities:
-    • [Responsibility 1]
-    • [Responsibility 2]
-
-Achievements:
-    • [Achievement 1]
-    • [Achievement 2]
-
-Career Highlights:
-    • [Major project or accomplishment]
-    • [Recognition or award received]
-    • [Skills developed or technologies mastered]`, 'text');
+    • Played a crucial role as a key member of the project team responsible for 
+        upgrading the main products from .Net Framework 4.x to .Net 6.
+    • Implemented various design patterns such as dependency injection, factory, 
+        and others to refactor over 70% of the project's codebase, resulting in 
+        improved operational efficiency of the system.
+    • Successfully refactored essential components like TaskManager and Playbook, 
+        breaking down the previously tightly-coupled system services into multiple 
+        microservices. Additionally, rewrote the execution logic to ensure smooth 
+        functioning.
+    • Developed an innovative IOC/IOA (indicators of compromise and indicators of 
+        attack) feature using MongoDb and Go.js, enabling the visualization of 
+        artifact relationships through interactive diagrams.
+    • Restructured API endpoints to adhere to RESTful protocols, while implementing 
+        front-end and back-end separation and microservice architecture through the 
+        use of API Gateways and load balancers.
+    • Overhauled the authentication and authorization system of the product, leveraging 
+        an independently created database operation library to seamlessly integrate 
+        with Microsoft's Identity middleware for a seamless system upgrade.
+    • Revamped multiple system security libraries, enhancing system integrity and 
+        simplifying the development process for new developers.
+    • Developed an independent open-source library tailored for ASP.Net API projects, 
+        specifically focusing on streamlining user input cleanup. This library 
+        significantly reduces back-end developers' workload and eliminates duplicate 
+        code.
+    • Authored a comprehensive system framework upgrade handbook comprising nearly 
+        100 pages. This resource provides guidance to developers at all levels, 
+        enabling them to quickly adapt to the code structure changes introduced in 
+        the new system framework.
+`, 'text');
     }
 
     navigateHistory(direction) {

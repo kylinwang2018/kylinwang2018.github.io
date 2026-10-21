@@ -4,7 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Yiqi Wang - Terminal Portfolio</title>
+    <meta name="description" content="Yiqi Wang, Senior Software Engineer in Vancouver. Payments, .NET, Go and distributed systems. An interactive terminal-style portfolio.">
+    <meta name="author" content="Yiqi Wang">
+    <link rel="canonical" href="https://yiqiwang.io/">
+
+    <!-- Link previews (LinkedIn, Slack, WeChat, X) -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://yiqiwang.io/">
+    <meta property="og:title" content="Yiqi Wang - Senior Software Engineer">
+    <meta property="og:description" content="Payments, .NET, Go and distributed systems. An interactive terminal-style portfolio.">
+    <meta property="og:image" content="https://yiqiwang.io/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <meta name="theme-color" content="#1b1c18">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap">
     <link rel="stylesheet" href="style.css">
+    <script>
+        // Apply the saved theme before first paint to avoid a flash of the default colors
+        try {
+            const theme = localStorage.getItem('theme');
+            if (['dracula', 'light'].includes(theme)) document.documentElement.dataset.theme = theme;
+        } catch (e) {}
+    </script>
 </head>
 <body>
     <div class="terminal">
@@ -36,6 +63,18 @@
             </div>
         </div>
     </div>
+    <noscript>
+        <!-- Plain-text profile for visitors and crawlers without JavaScript -->
+        <div class="noscript">
+            <h1>Yiqi Wang</h1>
+            <p>Senior Software Engineer at PressReader, Vancouver, Canada. Payments, .NET, Go and distributed systems.</p>
+            <p>
+                <a href="mailto:benwang.developer@gmail.com">benwang.developer@gmail.com</a> ·
+                <a href="https://github.com/kylinwang2018">GitHub</a> ·
+                <a href="https://linkedin.com/in/yiqi-wang-ben/">LinkedIn</a>
+            </p>
+        </div>
+    </noscript>
     <script src="script.js"></script>
 </body>
 </html>

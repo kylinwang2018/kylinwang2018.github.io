@@ -8,7 +8,11 @@ A Linux terminal-style personal portfolio website showcasing my skills, projects
 - **Multiple Commands**: Various commands to explore my profile
 - **Responsive Design**: Works on desktop and mobile devices
 - **Command History**: Navigate through previous commands with arrow keys
-- **Modern Styling**: Sleek terminal aesthetic with green-on-black theme
+- **Tab Completion**: Complete command and theme names with Tab
+- **Typing Animation**: Output appears line by line; press any key to skip
+- **Themes**: Monokai (default), Dracula and One Light, remembered per browser
+- **Modern Styling**: JetBrains Mono, frosted-glass window, clickable links
+- **Link Previews**: Open Graph tags and preview image for sharing
 
 ## 📋 Available Commands
 
@@ -26,6 +30,7 @@ A Linux terminal-style personal portfolio website showcasing my skills, projects
 | `date` | Show current date and time |
 | `pwd` | Show current directory |
 | `echo [text]` | Display specified text |
+| `theme [name]` | List or switch color themes |
 
 ## 🛠️ Technologies Used
 
@@ -41,6 +46,8 @@ kylinwang2018.github.io/
 ├── index.html          # Main HTML file
 ├── style.css           # CSS styles
 ├── script.js           # JavaScript functionality
+├── favicon.svg         # Site icon
+├── og-image.png        # Link preview image (1200×630)
 └── README.md           # Project documentation
 ```
 
@@ -105,14 +112,13 @@ This project is designed for GitHub Pages deployment:
 
 ## 🎨 Features to Add
 
-- [ ] Typing animation for command output
+- [x] Typing animation for command output
 - [ ] More interactive commands
 - [ ] File system simulation
-- [ ] Theme switching (different terminal themes)
+- [x] Theme switching (different terminal themes)
 - [ ] Sound effects
 - [ ] ASCII art integration
 - [ ] Social media integration
-- [ ] Download resume functionality
 
 ## 📱 Browser Compatibility
 

@@ -2,6 +2,11 @@ class Terminal {
     constructor() {
         this.output = document.getElementById('output');
         this.input = document.getElementById('command-input');
+        this.inputLine = this.output.querySelector('.input-line');
+        // Snapshot the welcome banner so 'clear' can restore it exactly
+        this.welcomeLines = Array.from(this.output.children)
+            .filter(node => node !== this.inputLine)
+            .map(node => node.cloneNode(true));
         this.commandHistory = [];
         this.historyIndex = 0;
         this.setupEventListeners();
@@ -18,12 +23,21 @@ class Terminal {
             } else if (e.key === 'ArrowDown') {
                 e.preventDefault();
                 this.navigateHistory(1);
+            } else if (e.ctrlKey && e.key === 'c' && this.input.selectionStart === this.input.selectionEnd) {
+                // Like a real shell: abandon the current line
+                e.preventDefault();
+                this.addCommandToOutput(this.input.value + '^C');
+                this.input.value = '';
+                this.historyIndex = this.commandHistory.length;
+                this.scrollToBottom();
             }
         });
 
-        // Keep input focused
+        // Keep input focused, but don't steal focus from a text selection
         document.addEventListener('click', () => {
-            this.input.focus();
+            if (!window.getSelection().toString()) {
+                this.input.focus();
+            }
         });
     }
 
@@ -36,6 +50,7 @@ class Terminal {
             whoami: () => this.addOutput('yiqiwang', 'success'),
             date: () => this.addOutput(new Date().toString(), 'text'),
             pwd: () => this.addOutput('/home/yiqiwang', 'text'),
+            echo: (args) => this.addOutput(args.join(' '), 'text'),
             contact: () => this.showContact(),
             skills: () => this.showSkills(),
             education: () => this.showEducation(),
@@ -58,18 +73,23 @@ class Terminal {
     addCommandToOutput(command) {
         const line = document.createElement('div');
         line.className = 'line';
-        line.innerHTML = `<span class="prompt">yiqiwang@io:~$</span><span class="command">${command}</span>`;
-        const inputLine = document.querySelector('.input-line');
-        // Insert before the input line
-        this.output.insertBefore(line, inputLine);
+        const prompt = document.createElement('span');
+        prompt.className = 'prompt';
+        prompt.textContent = 'yiqiwang@io:~$';
+        const text = document.createElement('span');
+        text.className = 'command';
+        text.textContent = command;
+        line.append(prompt, text);
+        this.output.insertBefore(line, this.inputLine);
     }
 
     executeCommand(command) {
-        const parts = command.split(' ');
+        const parts = command.split(/\s+/);
         const cmd = parts[0].toLowerCase();
         const args = parts.slice(1);
 
-        if (this.commands[cmd]) {
+        // hasOwn guards against names like 'constructor' or '__proto__'
+        if (Object.hasOwn(this.commands, cmd)) {
             this.commands[cmd](args);
         } else {
             this.addOutput(`Command not found: ${cmd}. Type 'help' for available commands.`, 'error');
@@ -77,38 +97,47 @@ class Terminal {
     }
 
     addOutput(text, className = 'text') {
-        // Split text by newlines and process each line
-        const lines = text.split('\n');
-        const inputLine = document.querySelector('.input-line');
-        
+        // Drop trailing blank lines left by template literals
+        const lines = text.replace(/\s+$/, '').split('\n');
+
         lines.forEach(lineText => {
             const line = document.createElement('div');
-            line.className = 'line';
-            // Handle empty lines - check if line is completely empty (not just whitespace)
-            if (lineText === '') {
-                line.innerHTML = `<span class="${className}">&nbsp;</span>`;
-            } else {
-                // Preserve leading spaces by replacing them with non-breaking spaces
-                const preservedSpaces = lineText.replace(/^ +/, match => '&nbsp;'.repeat(match.length));
-                line.innerHTML = `<span class="${className}">${preservedSpaces}</span>`;
+            line.className = 'line output';
+            // Hanging indent: wrapped text lines up under the first word (or after a bullet)
+            const indent = lineText.match(/^ *(• )?/)[0].length;
+            if (indent) {
+                line.style.paddingLeft = `${indent}ch`;
+                line.style.textIndent = `-${indent}ch`;
             }
-            // Insert before the input line
-            this.output.insertBefore(line, inputLine);
+            const span = document.createElement('span');
+            span.className = className;
+            // A non-breaking space keeps empty lines from collapsing
+            this.appendLinkified(span, lineText || '\u00a0');
+            line.appendChild(span);
+            this.output.insertBefore(line, this.inputLine);
         });
     }
 
-    // Convenience method for adding empty lines
-    addEmptyLine() {
-        this.addOutput('', 'text');
-    }
-
-    addOutputHTML(html) {
-        const line = document.createElement('div');
-        line.className = 'line';
-        line.innerHTML = html;
-        const inputLine = document.querySelector('.input-line');
-        // Insert before the input line
-        this.output.insertBefore(line, inputLine);
+    // Turn emails and bare URLs (github.com/..., yiqiwang.io) into clickable links
+    appendLinkified(parent, text) {
+        const pattern = /[\w.+-]+@[\w-]+(?:\.[\w-]+)+|(?:https?:\/\/)?(?:[\w-]+\.)+(?:com|io|org|net)(?:\/[^\s]*)?/g;
+        let last = 0;
+        for (const match of text.matchAll(pattern)) {
+            const target = match[0].replace(/[.,;:)]+$/, '');
+            parent.append(text.slice(last, match.index));
+            const link = document.createElement('a');
+            link.textContent = target;
+            if (target.includes('@') && !target.includes('/')) {
+                link.href = `mailto:${target}`;
+            } else {
+                link.href = /^https?:\/\//.test(target) ? target : `https://${target}`;
+                link.target = '_blank';
+                link.rel = 'noopener noreferrer';
+            }
+            parent.append(link);
+            last = match.index + target.length;
+        }
+        parent.append(text.slice(last));
     }
 
     showHelp() {
@@ -125,6 +154,7 @@ class Terminal {
     whoami       - Display current user
     date         - Show current date and time
     pwd          - Show current directory
+    echo [text]  - Print text
 
 Use arrow keys to navigate command history.`, 'info');
     }
@@ -136,17 +166,7 @@ Senior Software Engineer
 Passionate Full-Stack Developer | Machine Learning | Tech Enthusiast
 
 Professional Summary:
-    Experienced Senior Software Engineer with a strong background in .NET development,
-    modern web technologies, and system design. Skilled in building scalable backend
-    services and interactive front-end interfaces. Proven expertise in asynchronous 
-    programming with C#, SignalR for real-time communication, and performance-optimized 
-    SQL development. Adept at integrating third-party APIs, including payment gateways 
-    like Stripe, and implementing secure file upload systems with chunked transfer and 
-    encryption. Familiar with RabbitMQ for messaging, Redis for caching, and DevOps 
-    pipelines for streamlined deployment. Strong interest in machine learning 
-    applications, and experienced in building AI-assisted content transformation systems. 
-    Collaborative and pragmatic, with a user-focused mindset and an ability to balance 
-    business needs with technical execution.
+    Experienced Senior Software Engineer with a strong background in .NET development, modern web technologies, and system design. Skilled in building scalable backend services and interactive front-end interfaces. Proven expertise in asynchronous programming with C#, SignalR for real-time communication, and performance-optimized SQL development. Adept at integrating third-party APIs, including payment gateways like Stripe, and implementing secure file upload systems with chunked transfer and encryption. Familiar with RabbitMQ for messaging, Redis for caching, and DevOps pipelines for streamlined deployment. Strong interest in machine learning applications, and experienced in building AI-assisted content transformation systems. Collaborative and pragmatic, with a user-focused mindset and an ability to balance business needs with technical execution.
 
     Current Focus:
     • Building scalable web applications
@@ -166,26 +186,27 @@ GitHub:   github.com/kylinwang2018`, 'text');
         this.addOutput(`Projects Directory:
 
 ┌─ Smart Reading and Learning Companion
-│  An AI-powered dual-mode content transformation system that turns complex articles 
-│      into kid-friendly or language-learning formats.
-│  Tech: NET, SignalR, DeepSeek
+│  An AI-powered dual-mode content transformation system that turns complex
+│  articles into kid-friendly or language-learning formats.
+│  Tech: .NET, SignalR, DeepSeek
 └  Status: Under Development
 
 ┌─ Synchronized Multi-Client Video Playback
-│  A real-time multi-client video viewer where all participants see synchronized 
-│      playback across machines. Server-side stress testing with 200+ clients.
-│  Tech: HTML5 Video, Bootstrap, SignalR.
+│  A real-time multi-client video viewer where all participants see
+│  synchronized playback across machines. Server-side stress testing with
+│  200+ clients.
+│  Tech: HTML5 Video, Bootstrap, SignalR
 └  Status: Completed
 
 ┌─ Kinex Japanese Used Car Sales System
-│  A web-based system for Japanese used car sales, with features for managing
-│      inventory, customer interactions, and sales processes.
+│  A web-based system for Japanese used car sales, with features for
+│  managing inventory, customer interactions, and sales processes.
 │  Tech: ASP.NET Core, Entity Framework, PostgreSQL, RabbitMQ
 └  Status: Completed
 
 ┌─ Lumi Glass Sales Management System
-│  A sales management system for Lumi Glass, focusing on inventory management,
-│      order processing, and customer relationship management.
+│  A sales management system for Lumi Glass, focusing on inventory
+│  management, order processing, and customer relationship management.
 │  Tech: .NET 9, PostgreSQL, RabbitMQ, Redis
 └  Status: Completed`, 'text');
     }
@@ -209,8 +230,8 @@ Feel free to reach out for:
         this.addOutput(`Technical Skills:
     Languages:  C#, JavaScript, TypeScript, Python, SQL
     Frameworks: .NET, React, Node.js, Express
-    Databases: SQL Server, MongoDB, PostgreSQL
-    Tools:     Git, Docker, Jenkins, Azure DevOps
+    Databases:  SQL Server, MongoDB, PostgreSQL
+    Tools:      Git, Docker, Jenkins, Azure DevOps
 `, 'text');
     }
 
@@ -243,33 +264,12 @@ Company:     PressReader
 Duration:    2023-06 - Present
 
 Key Responsibilities:
-    • Led the transition from a monolithic architecture to a microservices-based 
-        structure, modularizing services based on business logic for efficient 
-        inter-service communication.
-    • Conducted in-depth analysis of the payment system’s bottlenecks and 
-        shortcomings, identifying issues like payment latency, error handling, and 
-        data consistency. Collaborated with the team to develop solutions, 
-        redesigning and implementing core payment processes and data synchronization 
-        mechanisms, which improved system reliability and performance, and 
-        significantly enhanced the user experience.
-    • Planned and executed a large-scale migration of user payment data, ensuring 
-        data integrity and accuracy throughout the process. Designed a phased 
-        migration strategy to minimize impact on the production environment and 
-        implemented exception-handling mechanisms.
-    • Implemented key performance indicators and metrics for the payment system, 
-        such as success rate, response time, and error rate, creating real-time 
-        monitoring dashboards in Prometheus and Grafana. Configured automatic 
-        alerting mechanisms to notify relevant teams of abnormal fluctuations or 
-        threshold breaches in critical metrics, enabling rapid issue identification 
-        and response, which significantly improved system stability and incident 
-        management.
-    • Led the integration of multiple third-party payment APIs, including key 
-    functions like payment authorization, settlement, and refunds. Ensured API 
-    compliance and optimized data transmission and response times.
-    • As a senior developer, provided guidance to junior developers, offering 
-    one-on-one technical training, code reviews, and regular knowledge-sharing sessions. 
-    Helped junior team members quickly advance their technical skills, ensuring their 
-    code quality met team standards.
+    • Led the transition from a monolithic architecture to a microservices-based structure, modularizing services based on business logic for efficient inter-service communication.
+    • Conducted in-depth analysis of the payment system’s bottlenecks and shortcomings, identifying issues like payment latency, error handling, and data consistency. Collaborated with the team to develop solutions, redesigning and implementing core payment processes and data synchronization mechanisms, which improved system reliability and performance, and significantly enhanced the user experience.
+    • Planned and executed a large-scale migration of user payment data, ensuring data integrity and accuracy throughout the process. Designed a phased migration strategy to minimize impact on the production environment and implemented exception-handling mechanisms.
+    • Implemented key performance indicators and metrics for the payment system, such as success rate, response time, and error rate, creating real-time monitoring dashboards in Prometheus and Grafana. Configured automatic alerting mechanisms to notify relevant teams of abnormal fluctuations or threshold breaches in critical metrics, enabling rapid issue identification and response, which significantly improved system stability and incident management.
+    • Led the integration of multiple third-party payment APIs, including key functions like payment authorization, settlement, and refunds. Ensured API compliance and optimized data transmission and response times.
+    • As a senior developer, provided guidance to junior developers, offering one-on-one technical training, code reviews, and regular knowledge-sharing sessions. Helped junior team members quickly advance their technical skills, ensuring their code quality met team standards.
 
 Achievements:
     • First Place Overall in PressReader's Inaugural Internal Hackathon.
@@ -281,34 +281,15 @@ Company:     D3 Security Management
 Duration:    2022-06 - 2023-06
 
 Key Responsibilities:
-    • Played a crucial role as a key member of the project team responsible for 
-        upgrading the main products from .Net Framework 4.x to .Net 6.
-    • Implemented various design patterns such as dependency injection, factory, 
-        and others to refactor over 70% of the project's codebase, resulting in 
-        improved operational efficiency of the system.
-    • Successfully refactored essential components like TaskManager and Playbook, 
-        breaking down the previously tightly-coupled system services into multiple 
-        microservices. Additionally, rewrote the execution logic to ensure smooth 
-        functioning.
-    • Developed an innovative IOC/IOA (indicators of compromise and indicators of 
-        attack) feature using MongoDb and Go.js, enabling the visualization of 
-        artifact relationships through interactive diagrams.
-    • Restructured API endpoints to adhere to RESTful protocols, while implementing 
-        front-end and back-end separation and microservice architecture through the 
-        use of API Gateways and load balancers.
-    • Overhauled the authentication and authorization system of the product, leveraging 
-        an independently created database operation library to seamlessly integrate 
-        with Microsoft's Identity middleware for a seamless system upgrade.
-    • Revamped multiple system security libraries, enhancing system integrity and 
-        simplifying the development process for new developers.
-    • Developed an independent open-source library tailored for ASP.Net API projects, 
-        specifically focusing on streamlining user input cleanup. This library 
-        significantly reduces back-end developers' workload and eliminates duplicate 
-        code.
-    • Authored a comprehensive system framework upgrade handbook comprising nearly 
-        100 pages. This resource provides guidance to developers at all levels, 
-        enabling them to quickly adapt to the code structure changes introduced in 
-        the new system framework.
+    • Played a crucial role as a key member of the project team responsible for upgrading the main products from .Net Framework 4.x to .Net 6.
+    • Implemented various design patterns such as dependency injection, factory, and others to refactor over 70% of the project's codebase, resulting in improved operational efficiency of the system.
+    • Successfully refactored essential components like TaskManager and Playbook, breaking down the previously tightly-coupled system services into multiple microservices. Additionally, rewrote the execution logic to ensure smooth functioning.
+    • Developed an innovative IOC/IOA (indicators of compromise and indicators of attack) feature using MongoDb and Go.js, enabling the visualization of artifact relationships through interactive diagrams.
+    • Restructured API endpoints to adhere to RESTful protocols, while implementing front-end and back-end separation and microservice architecture through the use of API Gateways and load balancers.
+    • Overhauled the authentication and authorization system of the product, leveraging an independently created database operation library to seamlessly integrate with Microsoft's Identity middleware for a seamless system upgrade.
+    • Revamped multiple system security libraries, enhancing system integrity and simplifying the development process for new developers.
+    • Developed an independent open-source library tailored for ASP.Net API projects, specifically focusing on streamlining user input cleanup. This library significantly reduces back-end developers' workload and eliminates duplicate code.
+    • Authored a comprehensive system framework upgrade handbook comprising nearly 100 pages. This resource provides guidance to developers at all levels, enabling them to quickly adapt to the code structure changes introduced in the new system framework.
 `, 'text');
     }
 
@@ -329,24 +310,13 @@ Key Responsibilities:
     }
 
     clearTerminal() {
-        this.output.innerHTML = `
-            <div class="line">
-                <span class="prompt">yiqiwang@io:~$</span>
-                <span class="command">Welcome to Yiqi Wang's Terminal Portfolio</span>
-            </div>
-            <div class="line">
-                <span class="text">Type 'help' to see available commands.</span>
-            </div>
-            <div class="line"></div>
-            <div class="input-line">
-                <span class="prompt">yiqiwang@io:~$</span>
-                <input type="text" id="command-input" autocomplete="off" autofocus>
-            </div>
-        `;
-        // Re-setup the input reference and event listeners
-        this.input = document.getElementById('command-input');
-        this.setupEventListeners();
-        // Ensure the input is focused
+        // Remove everything but the input line, then restore the welcome banner
+        while (this.output.firstChild !== this.inputLine) {
+            this.output.removeChild(this.output.firstChild);
+        }
+        this.welcomeLines.forEach(node => {
+            this.output.insertBefore(node.cloneNode(true), this.inputLine);
+        });
         this.input.focus();
     }
 
@@ -359,17 +329,4 @@ Key Responsibilities:
 // Initialize terminal when page loads
 document.addEventListener('DOMContentLoaded', () => {
     new Terminal();
-});
-
-// Easter eggs and additional functionality
-document.addEventListener('keydown', (e) => {
-    // Konami code or other easter eggs can be added here
-    if (e.ctrlKey && e.key === 'c') {
-        e.preventDefault();
-        const terminal = document.querySelector('.terminal');
-        terminal.style.animation = 'none';
-        setTimeout(() => {
-            terminal.style.animation = '';
-        }, 100);
-    }
 });

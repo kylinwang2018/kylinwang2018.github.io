@@ -26,7 +26,6 @@ A Linux terminal-style personal portfolio website showcasing my skills, projects
 | `date` | Show current date and time |
 | `pwd` | Show current directory |
 | `echo [text]` | Display specified text |
-| `cat [file]` | Display file contents |
 
 ## 🛠️ Technologies Used
 

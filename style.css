@@ -10,6 +10,7 @@ body {
     color: #f8f8f2;
     overflow: hidden;
     height: 100vh;
+    height: 100dvh; /* excludes mobile browser toolbars */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -79,6 +80,11 @@ body {
     word-wrap: break-word;
 }
 
+/* Keep column alignment in command output (HTML would collapse runs of spaces) */
+.line.output {
+    white-space: pre-wrap;
+}
+
 .prompt {
     color: #a6e22e;
     font-weight: bold;
@@ -105,6 +111,16 @@ body {
     color: #66d9ef;
 }
 
+.line a {
+    color: #66d9ef;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.line a:hover {
+    color: #a6e22e;
+}
+
 .input-line {
     display: flex;
     align-items: center;
@@ -114,8 +130,8 @@ body {
     background: transparent;
     border: none;
     color: #f8f8f2;
-    font-family: 'Courier New', monospace;
-    font-size: 14px;
+    font-family: inherit;
+    font-size: inherit;
     outline: none;
     flex-grow: 1;
     margin-left: 10px;
